@@ -3,6 +3,7 @@ kind: BuildConfig
 metadata:
   labels:
   name: rebase-operator
+  namespace: rebase-operator
 spec:
   output:
     to:

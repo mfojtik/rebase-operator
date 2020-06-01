@@ -5,7 +5,6 @@ metadata:
   name: rebase-operator
   annotations:
     image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"rebase-operator:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"operator\")].image"}]'
-    c
   labels:
     app: rebase-operator
 spec:
@@ -26,9 +25,6 @@ spec:
           configMap:
             name: operator-config
             optional: true
-        - name: home
-          persistentVolumeClaim:
-            claimName: cache
       containers:
         - name: operator
           terminationMessagePolicy: FallbackToLogsOnError
@@ -39,8 +35,3 @@ spec:
             requests:
               memory: 50Mi
               cpu: 10m
-          volumeMounts:
-            - mountPath: /var/run/operator-config
-              name: config
-            - mountPath: "/cache"
-              name: cache
