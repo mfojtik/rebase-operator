@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: rebase-operator
+  name: rebase-operator
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"rebase-operator:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"operator\")].image"}]'
+    c
+  labels:
+    app: rebase-operator
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rebase-operator
+  template:
+    metadata:
+      name: rebase-operator
+      labels:
+        app: rebase-operator
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: operator-config
+            optional: true
+        - name: home
+          persistentVolumeClaim:
+            claimName: cache
+      containers:
+        - name: operator
+          terminationMessagePolicy: FallbackToLogsOnError
+          image: quay.io/mfojtik/rebase-operator:dev
+          imagePullPolicy: IfNotPresent
+          command: ["rebase-operator", "run", "--config", "/var/run/operator-config/config.yaml"]
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 10m
+          volumeMounts:
+            - mountPath: /var/run/operator-config
+              name: config
+            - mountPath: "/cache"
+              name: cache

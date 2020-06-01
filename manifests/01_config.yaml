@@ -1,0 +1,32 @@
+apiVersion: v1
+data:
+  config.yaml: |+
+    ---
+    slackChannel: group-b-status
+    slackAdminChannel: group-b-bots
+    credentials:
+      apiKey: base64:
+      slackToken:
+    groups:
+      admins:
+      - mfojtik
+      - sttts
+      leads:
+      - deads2k
+      - hexfusion
+      - maszulik
+      - mfojtik
+      - sttts
+      api-auth:
+      - sttts
+      - deads2k
+      - polynomial
+      - Standa
+      - akashem
+      - Luis Sanchez
+      - vareti
+      - marun
+kind: ConfigMap
+metadata:
+  name: operator-config
+  namespace: rebase-operator
